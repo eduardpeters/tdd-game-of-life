@@ -26,4 +26,33 @@ describe('RLE parsing', () => {
     expect(parsed).toHaveProperty('headers');
     expect(parsed.headers).toEqual('');
   });
+
+  test('It returns an object with dimensions', () => {
+    const parsed = parseRLE(BLOCK_FILE_STRING);
+
+    const dimensions = { x: 2, y: 2 };
+
+    expect(parsed).toHaveProperty('dimensions');
+    expect(parsed.dimensions).toEqual(dimensions);
+  });
+
+  test('It throws an error if no dimensions line is present', () => {
+    const dimensionLessFile = BLOCK_FILE_STRING.split('\n')
+      .filter((line) => !line.startsWith('x ='))
+      .join('\n');
+
+    expect(() => parseRLE(dimensionLessFile)).toThrowError('No valid dimensions found');
+  });
+
+  test('It throws an error if no y dimension is provided', () => {
+    const invalidDimensions = 'x = 2\n2o$2o!';
+
+    expect(() => parseRLE(invalidDimensions)).toThrowError('No valid dimensions found');
+  });
+
+  test('Dimensions should be at least 1 in magnitude', () => {
+    const invalidDimensions = 'x = 2, y = -2\n2o$2o!';
+
+    expect(() => parseRLE(invalidDimensions)).toThrowError('No valid dimensions found');
+  });
 });
