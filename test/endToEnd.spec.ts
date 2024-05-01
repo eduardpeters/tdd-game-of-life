@@ -8,14 +8,14 @@ describe('Running the main application', () => {
     const filepath = '../patters/block.rle';
 
     //@ts-expect-error
-    expect(() => main()).toThrowError();
+    expect(() => main()).toThrowError('Two arguments should be supplied');
   });
 
   test('An error is thrown if no generations are specified', () => {
     const filepath = '../patters/block.rle';
 
     //@ts-expect-error
-    expect(() => main(filepath)).toThrowError();
+    expect(() => main(filepath)).toThrowError('Two arguments should be supplied');
   });
 
   test('A RLE file is read and returned', () => {
