@@ -11,20 +11,20 @@ describe('RLE parsing', () => {
     expect(() => parseRLE(fileString)).toThrowError('No file content');
   });
 
-  test('It returns an object with comment headers', () => {
+  test('It returns an object with headers', () => {
     const parsed = parseRLE(BLOCK_FILE_STRING);
-    const headers = BLOCK_FILE_STRING.substring(0, BLOCK_FILE_STRING.indexOf('x =')).trim();
+    const headers = BLOCK_FILE_STRING.substring(0, BLOCK_FILE_STRING.indexOf('2o$2o!')).trim();
 
     expect(parsed).toHaveProperty('headers');
     expect(parsed.headers).toEqual(headers);
   });
 
-  test('It returns empty headers if there are none', () => {
+  test('It returns only dimension headers if there are no comments', () => {
     const headerLessString = BLOCK_FILE_STRING.substring(BLOCK_FILE_STRING.indexOf('x ='));
     const parsed = parseRLE(headerLessString);
 
     expect(parsed).toHaveProperty('headers');
-    expect(parsed.headers).toEqual('');
+    expect(parsed.headers).toEqual('x = 2, y = 2, rule = B3/S23');
   });
 
   test('It returns an object with dimensions', () => {

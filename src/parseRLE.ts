@@ -17,7 +17,7 @@ export default function parseRLE(content: string) {
 }
 
 function extractHeaders(lines: string[]): string {
-  return lines.filter((line) => line.startsWith('#')).join('\n');
+  return lines.filter((line) => line.startsWith('#') || line.startsWith('x =')).join('\n');
 }
 
 function extractDimensions(lines: string[]): Dimensions {
