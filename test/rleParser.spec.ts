@@ -18,4 +18,12 @@ describe('RLE parsing', () => {
     expect(parsed).toHaveProperty('headers');
     expect(parsed.headers).toEqual(headers);
   });
+
+  test('It returns empty headers if there are none', () => {
+    const headerLessString = BLOCK_FILE_STRING.substring(BLOCK_FILE_STRING.indexOf('x ='));
+    const parsed = parseRLE(headerLessString);
+
+    expect(parsed).toHaveProperty('headers');
+    expect(parsed.headers).toEqual('');
+  });
 });

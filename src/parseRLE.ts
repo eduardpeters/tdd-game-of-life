@@ -6,6 +6,10 @@ export default function parseRLE(content: string) {
   const lines = content.split('\n');
 
   return {
-    headers: lines.slice(0, 3).join('\n'),
+    headers: extractHeaders(lines),
   };
+}
+
+function extractHeaders(lines: string[]): string {
+  return lines.filter((line) => line.startsWith('#')).join('\n');
 }
