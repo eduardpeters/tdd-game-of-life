@@ -17,16 +17,16 @@ export default function parseRLE(content: string) {
 }
 
 function extractHeaders(lines: string[]): string {
-  return lines.filter((line) => line.startsWith('#') || line.startsWith('x =')).join('\n');
+  return lines.filter((line) => line.startsWith('#') || line.startsWith('x')).join('\n');
 }
 
 function extractDimensions(lines: string[]): Dimensions {
-  const dimensionsLine = lines.find((line) => line.startsWith('x ='));
+  const dimensionsLine = lines.find((line) => line.startsWith('x'));
   if (!dimensionsLine) {
     throw new Error('No valid dimensions found');
   }
   const splitDimensionsLine = dimensionsLine.split(',');
-  if (splitDimensionsLine.length < 2 || !splitDimensionsLine[1].trim().startsWith('y =')) {
+  if (splitDimensionsLine.length < 2 || !splitDimensionsLine[1].trim().startsWith('y')) {
     throw new Error('No valid dimensions found');
   }
 

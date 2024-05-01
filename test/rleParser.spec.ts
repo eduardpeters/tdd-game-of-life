@@ -55,4 +55,14 @@ describe('RLE parsing', () => {
 
     expect(() => parseRLE(invalidDimensions)).toThrowError('No valid dimensions found');
   });
+
+  test('Whitespace is not relevant when extracting dimensions', () => {
+    const irregularWhitespace = 'x  =  2, y= 2\n2o$2o!';
+    const parsed = parseRLE(irregularWhitespace);
+
+    const dimensions = { x: 2, y: 2 };
+
+    expect(parsed).toHaveProperty('dimensions');
+    expect(parsed.dimensions).toEqual(dimensions);
+  });
 });
