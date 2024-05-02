@@ -58,7 +58,7 @@ function buildMatrix(dimensions: Dimensions, lines: string[]) {
   const matrix = [];
   const pattern = lines.filter((line) => !line.startsWith('#') && !line.startsWith('x')).join();
   let patternEndFlag = false;
-  const patternRows = pattern.split('$');
+  const patternRows = pattern.split(RLE_LINE_BREAK);
   for (let row of patternRows) {
     if (patternEndFlag) break;
     if (row.includes(RLE_PATTERN_END)) {
