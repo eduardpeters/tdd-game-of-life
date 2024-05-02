@@ -1,8 +1,11 @@
 import { describe, expect, test } from 'vitest';
 import parseRLE from '../src/parseRLE';
+import { ALIVE_CELL, DEAD_CELL } from '../src/constants';
 
 const BLOCK_FILE_STRING =
   '#N Block\n#C An extremely common 4-cell still life.\n#C www.conwaylife.com/wiki/index.php?title=Block\nx = 2, y = 2, rule = B3/S23\n2o$2o!';
+const GLIDER_FILE_STRING =
+  '#N Glider\n#O Richard K. Guy\n#C The smallest, most common, and first discovered spaceship. Diagonal, has period 4 and speed c/4.\n#C www.conwaylife.com/wiki/index.php?title=Glider\nx = 3, y = 3, rule = B3/S23\nbob$2bo$3o!';
 
 describe('RLE parsing', () => {
   test('It throws an error if there is nothing to parse', () => {
@@ -80,5 +83,40 @@ describe('RLE parsing', () => {
 
     expect(resultMatrix).toHaveLength(2);
     expect(resultMatrix[0]).toHaveLength(2);
+  });
+
+  test('Pattern matrix has the correct cells when all are alive', () => {
+    const parsed = parseRLE(BLOCK_FILE_STRING);
+
+    const blockPattern = [
+      [ALIVE_CELL, ALIVE_CELL],
+      [ALIVE_CELL, ALIVE_CELL],
+    ];
+    expect(parsed.matrix).toEqual(blockPattern);
+  });
+
+  test('Pattern matrix has the correct cells there is a mixture of cells', () => {
+    const parsed = parseRLE(GLIDER_FILE_STRING);
+
+    const blockPattern = [
+      [DEAD_CELL, ALIVE_CELL, DEAD_CELL],
+      [DEAD_CELL, DEAD_CELL, ALIVE_CELL],
+      [ALIVE_CELL, ALIVE_CELL, ALIVE_CELL],
+    ];
+    expect(parsed.matrix).toEqual(blockPattern);
+  });
+
+  test('Dead cells are filled in the patterns', () => {
+    const inferredDeadCellsPattern = 'x = 4, y = 4\n2bo$o$4b$2o!';
+    const parsed = parseRLE(inferredDeadCellsPattern);
+
+    const blockPattern = [
+      [DEAD_CELL, DEAD_CELL, ALIVE_CELL, DEAD_CELL],
+      [ALIVE_CELL, DEAD_CELL, DEAD_CELL, DEAD_CELL],
+      [DEAD_CELL, DEAD_CELL, DEAD_CELL, DEAD_CELL],
+      [ALIVE_CELL, ALIVE_CELL, DEAD_CELL, DEAD_CELL],
+    ];
+
+    expect(parsed.matrix).toEqual(blockPattern);
   });
 });

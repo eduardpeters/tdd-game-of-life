@@ -1,3 +1,5 @@
+import { ALIVE_CELL, DEAD_CELL, RLE_LINE_BREAK, RLE_PATTERN_END } from './constants';
+
 interface Dimensions {
   x: number;
   y: number;
@@ -54,12 +56,33 @@ function extractDimensions(lines: string[]): Dimensions {
 
 function buildMatrix(dimensions: Dimensions, lines: string[]) {
   const matrix = [];
-  for (let row = 0; row < dimensions.y; row++) {
-    const newRow = [];
-    for (let column = 0; column < dimensions.x; column++) {
-      newRow.push(0);
-    }
+  const pattern = lines.filter((line) => !line.startsWith('#') && !line.startsWith('x')).join();
+  const patternRows = pattern.split('$');
+  console.log(patternRows);
+  for (let row of patternRows) {
+    const newRow = parseRow(row, dimensions.x);
     matrix.push(newRow);
   }
   return matrix;
+}
+
+function parseRow(patternRow: string, rowLength: number): string[] {
+  const newRow = [];
+  const splitRow = patternRow.split('');
+  let runCount = 1;
+  for (let tag of splitRow) {
+    if (tag === RLE_PATTERN_END) continue;
+    if (![ALIVE_CELL, DEAD_CELL].includes(tag)) {
+      runCount = parseInt(tag);
+    } else {
+      for (let i = 0; i < runCount; i++) {
+        newRow.push(tag);
+      }
+      runCount = 1;
+    }
+  }
+  while (newRow.length < rowLength) {
+    newRow.push(DEAD_CELL);
+  }
+  return newRow;
 }
