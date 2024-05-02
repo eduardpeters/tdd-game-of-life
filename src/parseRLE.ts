@@ -1,11 +1,7 @@
 import { ALIVE_CELL, DEAD_CELL, RLE_LINE_BREAK, RLE_PATTERN_END } from './constants';
+import type { Dimensions, PatternFileData } from './types';
 
-interface Dimensions {
-  x: number;
-  y: number;
-}
-
-export default function parseRLE(content: string) {
+export default function parseRLE(content: string): PatternFileData {
   if (!content) {
     throw new Error('No file content');
   }
