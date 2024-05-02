@@ -119,4 +119,18 @@ describe('RLE parsing', () => {
 
     expect(parsed.matrix).toEqual(blockPattern);
   });
+
+  test('Everything after the ! end tag is ignored', () => {
+    const inferredDeadCellsPattern = 'x = 4, y = 4\n2bo$o$4b$2o!2bo$o$4b$2o';
+    const parsed = parseRLE(inferredDeadCellsPattern);
+
+    const blockPattern = [
+      [DEAD_CELL, DEAD_CELL, ALIVE_CELL, DEAD_CELL],
+      [ALIVE_CELL, DEAD_CELL, DEAD_CELL, DEAD_CELL],
+      [DEAD_CELL, DEAD_CELL, DEAD_CELL, DEAD_CELL],
+      [ALIVE_CELL, ALIVE_CELL, DEAD_CELL, DEAD_CELL],
+    ];
+
+    expect(parsed.matrix).toEqual(blockPattern);
+  });
 });

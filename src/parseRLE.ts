@@ -57,9 +57,13 @@ function extractDimensions(lines: string[]): Dimensions {
 function buildMatrix(dimensions: Dimensions, lines: string[]) {
   const matrix = [];
   const pattern = lines.filter((line) => !line.startsWith('#') && !line.startsWith('x')).join();
+  let patternEndFlag = false;
   const patternRows = pattern.split('$');
-  console.log(patternRows);
   for (let row of patternRows) {
+    if (patternEndFlag) break;
+    if (row.includes(RLE_PATTERN_END)) {
+      patternEndFlag = true;
+    }
     const newRow = parseRow(row, dimensions.x);
     matrix.push(newRow);
   }
@@ -71,7 +75,7 @@ function parseRow(patternRow: string, rowLength: number): string[] {
   const splitRow = patternRow.split('');
   let runCount = 1;
   for (let tag of splitRow) {
-    if (tag === RLE_PATTERN_END) continue;
+    if (tag === RLE_PATTERN_END) break;
     if (![ALIVE_CELL, DEAD_CELL].includes(tag)) {
       runCount = parseInt(tag);
     } else {
