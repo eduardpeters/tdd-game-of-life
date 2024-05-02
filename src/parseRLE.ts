@@ -10,9 +10,12 @@ export default function parseRLE(content: string) {
 
   const lines = content.split('\n');
 
+  const dimensions = extractDimensions(lines);
+
   return {
     headers: extractHeaders(lines),
-    dimensions: extractDimensions(lines),
+    dimensions: dimensions,
+    matrix: buildMatrix(dimensions, lines),
   };
 }
 
@@ -47,4 +50,16 @@ function extractDimensions(lines: string[]): Dimensions {
     x: xValue,
     y: yValue,
   };
+}
+
+function buildMatrix(dimensions: Dimensions, lines: string[]) {
+  const matrix = [];
+  for (let row = 0; row < dimensions.y; row++) {
+    const newRow = [];
+    for (let column = 0; column < dimensions.x; column++) {
+      newRow.push(0);
+    }
+    matrix.push(newRow);
+  }
+  return matrix;
 }

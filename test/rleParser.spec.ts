@@ -65,4 +65,20 @@ describe('RLE parsing', () => {
     expect(parsed).toHaveProperty('dimensions');
     expect(parsed.dimensions).toEqual(dimensions);
   });
+
+  test('Pattern matrix is returned in the object', () => {
+    const parsed = parseRLE(BLOCK_FILE_STRING);
+
+    expect(parsed).toHaveProperty('matrix');
+    expect(parsed.matrix).toBeInstanceOf(Array);
+  });
+
+  test('Pattern matrix has the correct dimensions', () => {
+    const parsed = parseRLE(BLOCK_FILE_STRING);
+
+    const resultMatrix = parsed.matrix;
+
+    expect(resultMatrix).toHaveLength(2);
+    expect(resultMatrix[0]).toHaveLength(2);
+  });
 });
