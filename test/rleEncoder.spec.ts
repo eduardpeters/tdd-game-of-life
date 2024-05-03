@@ -7,7 +7,7 @@ describe('RLE encoding', () => {
     const toEncode = {
       headers: '# This is a test\nx = 1, y = 1',
       dimensions: { x: 1, y: 1 },
-      matrix: [['o']],
+      matrix: [[ALIVE_CELL]],
     };
     const encoded = encodeRLE(toEncode);
 
@@ -19,8 +19,8 @@ describe('RLE encoding', () => {
       headers: '# This is a test\nx = 1, y = 1',
       dimensions: { x: 2, y: 2 },
       matrix: [
-        ['o', 'o'],
-        ['b', 'b'],
+        [ALIVE_CELL, ALIVE_CELL],
+        [DEAD_CELL, DEAD_CELL],
       ],
     };
     const encoded = encodeRLE(toEncode);
@@ -35,8 +35,8 @@ describe('RLE encoding', () => {
       headers: '# This is a test\nx = 1, y = 1, rule = B3/S23',
       dimensions: { x: 2, y: 2 },
       matrix: [
-        ['o', 'o'],
-        ['b', 'b'],
+        [ALIVE_CELL, ALIVE_CELL],
+        [DEAD_CELL, DEAD_CELL],
       ],
     };
     const encoded = encodeRLE(toEncode);
@@ -50,7 +50,7 @@ describe('RLE encoding', () => {
     const toEncode = {
       headers: '# This is a test\nx = 1, y = 1',
       dimensions: { x: 1, y: 1 },
-      matrix: [['o']],
+      matrix: [[ALIVE_CELL]],
     };
     const encoded = encodeRLE(toEncode);
 
@@ -63,7 +63,7 @@ describe('RLE encoding', () => {
     const toEncode = {
       headers: '# This is a test\nx = 3, y = 1',
       dimensions: { x: 3, y: 1 },
-      matrix: [['o', 'o', 'o']],
+      matrix: [[ALIVE_CELL, ALIVE_CELL, ALIVE_CELL]],
     };
     const encoded = encodeRLE(toEncode);
 
@@ -76,7 +76,7 @@ describe('RLE encoding', () => {
     const toEncode = {
       headers: '# This is a test\nx = 3, y = 1',
       dimensions: { x: 3, y: 1 },
-      matrix: [['o', 'b', 'o']],
+      matrix: [[ALIVE_CELL, DEAD_CELL, ALIVE_CELL]],
     };
     const encoded = encodeRLE(toEncode);
 
@@ -89,11 +89,24 @@ describe('RLE encoding', () => {
     const toEncode = {
       headers: '# This is a test\nx = 3, y = 1',
       dimensions: { x: 3, y: 1 },
-      matrix: [['o', 'b', 'b']],
+      matrix: [[ALIVE_CELL, DEAD_CELL, DEAD_CELL]],
     };
     const encoded = encodeRLE(toEncode);
 
     const rleEncodedReference = '# This is a test\nx = 3, y = 1\no!';
+
+    expect(encoded).toEqual(rleEncodedReference);
+  });
+
+  test('A single row pattern with only dead cells correctly prints them out', () => {
+    const toEncode = {
+      headers: '# This is a test\nx = 3, y = 1',
+      dimensions: { x: 3, y: 1 },
+      matrix: [[DEAD_CELL, DEAD_CELL, DEAD_CELL]],
+    };
+    const encoded = encodeRLE(toEncode);
+
+    const rleEncodedReference = '# This is a test\nx = 3, y = 1\n3b!';
 
     expect(encoded).toEqual(rleEncodedReference);
   });
@@ -103,8 +116,8 @@ describe('RLE encoding', () => {
       headers: '# This is a test\nx = 2, y = 2',
       dimensions: { x: 2, y: 2 },
       matrix: [
-        ['o', 'o'],
-        ['o', 'o'],
+        [ALIVE_CELL, ALIVE_CELL],
+        [ALIVE_CELL, ALIVE_CELL],
       ],
     };
     const encoded = encodeRLE(toEncode);
