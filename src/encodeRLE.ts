@@ -44,7 +44,9 @@ function buildPattern(matrix: string[][]): string {
         currentTag = matrix[row][column];
       }
     }
-    if (currentTag === ALIVE_CELL) {
+    if (rowString.length === 0 && currentTag === DEAD_CELL) {
+      rowString += `${tagCount}${currentTag}`;
+    } else if (currentTag === ALIVE_CELL) {
       if (tagCount > 1) {
         rowString += tagCount;
       }
