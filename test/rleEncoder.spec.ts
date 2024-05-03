@@ -45,4 +45,56 @@ describe('RLE encoding', () => {
 
     expect(encoded.startsWith(updatedDimensions)).toBe(true);
   });
+
+  test('A complete pattern in RLE is returned', () => {
+    const toEncode = {
+      headers: '# This is a test\nx = 1, y = 1',
+      dimensions: { x: 1, y: 1 },
+      matrix: [['o']],
+    };
+    const encoded = encodeRLE(toEncode);
+
+    const rleEncodedReference = '# This is a test\nx = 1, y = 1\no!';
+
+    expect(encoded).toEqual(rleEncodedReference);
+  });
+
+  test('A single row pattern with multiple live cells is correctly returned', () => {
+    const toEncode = {
+      headers: '# This is a test\nx = 3, y = 1',
+      dimensions: { x: 3, y: 1 },
+      matrix: [['o', 'o', 'o']],
+    };
+    const encoded = encodeRLE(toEncode);
+
+    const rleEncodedReference = '# This is a test\nx = 3, y = 1\n3o!';
+
+    expect(encoded).toEqual(rleEncodedReference);
+  });
+
+  test('A single row pattern with alternating cell states is correctly returned', () => {
+    const toEncode = {
+      headers: '# This is a test\nx = 3, y = 1',
+      dimensions: { x: 3, y: 1 },
+      matrix: [['o', 'b', 'o']],
+    };
+    const encoded = encodeRLE(toEncode);
+
+    const rleEncodedReference = '# This is a test\nx = 3, y = 1\nobo!';
+
+    expect(encoded).toEqual(rleEncodedReference);
+  });
+
+  test('A single row pattern with a single alive cell correctly skips final dead cells', () => {
+    const toEncode = {
+      headers: '# This is a test\nx = 3, y = 1',
+      dimensions: { x: 3, y: 1 },
+      matrix: [['o', 'b', 'b']],
+    };
+    const encoded = encodeRLE(toEncode);
+
+    const rleEncodedReference = '# This is a test\nx = 3, y = 1\no!';
+
+    expect(encoded).toEqual(rleEncodedReference);
+  });
 });
