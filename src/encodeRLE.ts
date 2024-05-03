@@ -28,34 +28,37 @@ function buildPattern(matrix: string[][]): string {
   let patternString = '';
 
   for (let row = 0; row < matrix.length; row++) {
-    let rowString = '';
-    let tagCount = 1;
-    let currentTag = matrix[row][0];
-    for (let column = 1; column < matrix[row].length; column++) {
-      if (currentTag === matrix[row][column]) {
-        tagCount++;
-      } else {
-        if (tagCount > 1) {
-          rowString += tagCount;
-        }
-        rowString += currentTag;
-
-        tagCount = 1;
-        currentTag = matrix[row][column];
-      }
-    }
-    if (rowString.length === 0 && currentTag === DEAD_CELL) {
-      rowString += `${tagCount}${currentTag}`;
-    } else if (currentTag === ALIVE_CELL) {
-      if (tagCount > 1) {
-        rowString += tagCount;
-      }
-      rowString += currentTag;
-    }
+    let rowString = encodeRow(matrix[row]);
     if (row < matrix.length - 1) {
       rowString += RLE_LINE_BREAK;
     }
     patternString += rowString;
   }
+
   return patternString + RLE_PATTERN_END;
+}
+
+function encodeRow(row: string[]) {
+  let rowString = '';
+  let tagCount = 1;
+  let currentTag = row[0];
+  for (let column = 1; column < row.length; column++) {
+    if (currentTag === row[column]) {
+      tagCount++;
+    } else {
+      rowString += encodeTagCount(currentTag, tagCount);
+
+      tagCount = 1;
+      currentTag = row[column];
+    }
+  }
+  if (currentTag === ALIVE_CELL || (rowString.length === 0 && currentTag === DEAD_CELL)) {
+    rowString += encodeTagCount(currentTag, tagCount);
+  }
+
+  return rowString;
+}
+
+function encodeTagCount(currentTag: string, tagCount: number) {
+  return `${tagCount > 1 ? tagCount : ''}${currentTag}`;
 }
