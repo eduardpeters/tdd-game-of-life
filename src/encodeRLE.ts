@@ -50,8 +50,10 @@ function buildPattern(matrix: string[][]): string {
       }
       rowString += currentTag;
     }
-
+    if (row < matrix.length - 1) {
+      rowString += RLE_LINE_BREAK;
+    }
     patternString += rowString;
   }
-  return patternString + '!';
+  return patternString + RLE_PATTERN_END;
 }

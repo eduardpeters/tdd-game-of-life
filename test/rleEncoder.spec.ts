@@ -97,4 +97,20 @@ describe('RLE encoding', () => {
 
     expect(encoded).toEqual(rleEncodedReference);
   });
+
+  test('A multiline pattern includes the line ending characters', () => {
+    const toEncode = {
+      headers: '# This is a test\nx = 2, y = 2',
+      dimensions: { x: 2, y: 2 },
+      matrix: [
+        ['o', 'o'],
+        ['o', 'o'],
+      ],
+    };
+    const encoded = encodeRLE(toEncode);
+
+    const rleEncodedReference = '# This is a test\nx = 2, y = 2\n2o$2o!';
+
+    expect(encoded).toEqual(rleEncodedReference);
+  });
 });
