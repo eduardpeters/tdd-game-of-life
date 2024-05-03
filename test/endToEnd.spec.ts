@@ -18,9 +18,29 @@ describe('Running the main application', () => {
     expect(() => main(filepath)).toThrowError('Two arguments should be supplied');
   });
 
-  test('A RLE file is read and returned', () => {
+  test('A Block RLE file is read and returned', () => {
     const filepath = '../patterns/block.rle';
     const generations = 1;
+
+    const rlePath = path.join(__dirname, filepath);
+    const fileString = fs.readFileSync(rlePath, 'utf-8');
+
+    expect(main(filepath, generations)).toEqual(fileString);
+  });
+
+  test('A Blinker RLE file is read and returned', () => {
+    const filepath = '../patterns/blinker.rle';
+    const generations = 0;
+
+    const rlePath = path.join(__dirname, filepath);
+    const fileString = fs.readFileSync(rlePath, 'utf-8');
+
+    expect(main(filepath, generations)).toEqual(fileString);
+  });
+
+  test('A Glider RLE file is read and returned', () => {
+    const filepath = '../patterns/glider.rle';
+    const generations = 0;
 
     const rlePath = path.join(__dirname, filepath);
     const fileString = fs.readFileSync(rlePath, 'utf-8');
