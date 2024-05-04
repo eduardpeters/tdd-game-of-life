@@ -13,14 +13,21 @@ export default function runSimulations(matrix: string[][], generations: number) 
     for (let column = 0; column < matrix[row].length; column++) {
       const aliveNeighbors = countNeighbors(matrix, row, column);
 
-      console.log(aliveNeighbors);
+      console.log(aliveNeighbors, column);
       if (aliveNeighbors === 3) {
         simulated[row].push(ALIVE_CELL);
+      } else if (matrix[row][column] === ALIVE_CELL) {
+        if (aliveNeighbors > 3 || aliveNeighbors < 2) {
+          simulated[row].push(DEAD_CELL);
+        } else {
+          simulated[row].push(ALIVE_CELL);
+        }
       } else {
         simulated[row].push(DEAD_CELL);
       }
     }
   }
+  console.log(simulated);
   return simulated;
 }
 
