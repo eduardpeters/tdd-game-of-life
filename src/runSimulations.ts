@@ -11,31 +11,7 @@ export default function runSimulations(matrix: string[][], generations: number) 
   for (let row = 0; row < matrix.length; row++) {
     simulated.push([]);
     for (let column = 0; column < matrix[row].length; column++) {
-      let aliveNeighbors = 0;
-      if (row > 0) {
-        aliveNeighbors += matrix[row - 1][column] === ALIVE_CELL ? 1 : 0;
-        if (column > 0) {
-          aliveNeighbors += matrix[row - 1][column - 1] === ALIVE_CELL ? 1 : 0;
-        }
-        if (column < matrix[row].length - 1) {
-          aliveNeighbors += matrix[row - 1][column + 1] === ALIVE_CELL ? 1 : 0;
-        }
-      }
-      if (column > 0) {
-        aliveNeighbors += matrix[row][column - 1] === ALIVE_CELL ? 1 : 0;
-      }
-      if (column < matrix[row].length - 1) {
-        aliveNeighbors += matrix[row][column + 1] === ALIVE_CELL ? 1 : 0;
-      }
-      if (row < matrix.length - 1) {
-        aliveNeighbors += matrix[row + 1][column] === ALIVE_CELL ? 1 : 0;
-        if (column > 0) {
-          aliveNeighbors += matrix[row + 1][column - 1] === ALIVE_CELL ? 1 : 0;
-        }
-        if (column < matrix[row].length - 1) {
-          aliveNeighbors += matrix[row + 1][column + 1] === ALIVE_CELL ? 1 : 0;
-        }
-      }
+      const aliveNeighbors = countNeighbors(matrix, row, column);
 
       console.log(aliveNeighbors);
       if (aliveNeighbors === 3) {
@@ -46,4 +22,35 @@ export default function runSimulations(matrix: string[][], generations: number) 
     }
   }
   return simulated;
+}
+
+function countNeighbors(matrix: string[][], row: number, column: number) {
+  let aliveNeighbors = 0;
+
+  if (row > 0) {
+    aliveNeighbors += matrix[row - 1][column] === ALIVE_CELL ? 1 : 0;
+    if (column > 0) {
+      aliveNeighbors += matrix[row - 1][column - 1] === ALIVE_CELL ? 1 : 0;
+    }
+    if (column < matrix[row].length - 1) {
+      aliveNeighbors += matrix[row - 1][column + 1] === ALIVE_CELL ? 1 : 0;
+    }
+  }
+  if (column > 0) {
+    aliveNeighbors += matrix[row][column - 1] === ALIVE_CELL ? 1 : 0;
+  }
+  if (column < matrix[row].length - 1) {
+    aliveNeighbors += matrix[row][column + 1] === ALIVE_CELL ? 1 : 0;
+  }
+  if (row < matrix.length - 1) {
+    aliveNeighbors += matrix[row + 1][column] === ALIVE_CELL ? 1 : 0;
+    if (column > 0) {
+      aliveNeighbors += matrix[row + 1][column - 1] === ALIVE_CELL ? 1 : 0;
+    }
+    if (column < matrix[row].length - 1) {
+      aliveNeighbors += matrix[row + 1][column + 1] === ALIVE_CELL ? 1 : 0;
+    }
+  }
+
+  return aliveNeighbors;
 }
