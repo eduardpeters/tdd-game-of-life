@@ -165,14 +165,18 @@ describe('Simulate generations passing in the pattern', () => {
   });
 
   test('The pattern expands one row left when a dead cell comes alive outside the edge', () => {
-    const testMatrix = [[ALIVE_CELL], [ALIVE_CELL], [ALIVE_CELL]];
+    const testMatrix = [
+      [ALIVE_CELL, DEAD_CELL],
+      [ALIVE_CELL, ALIVE_CELL],
+      [ALIVE_CELL, DEAD_CELL],
+    ];
 
     const result = runSimulations(testMatrix, 1);
 
     const afterOneGeneration = [
-      [DEAD_CELL, DEAD_CELL],
-      [ALIVE_CELL, ALIVE_CELL],
-      [DEAD_CELL, DEAD_CELL],
+      [DEAD_CELL, ALIVE_CELL, ALIVE_CELL],
+      [ALIVE_CELL, ALIVE_CELL, ALIVE_CELL],
+      [DEAD_CELL, ALIVE_CELL, ALIVE_CELL],
     ];
 
     expect(result).toEqual(afterOneGeneration);
@@ -215,4 +219,18 @@ describe('Simulate generations passing in the pattern', () => {
 
     expect(result).toEqual(afterOneGeneration);
   });
+});
+
+test.skip('The pattern expands one row right when a dead cell comes alive outside the edge', () => {
+  const testMatrix = [[ALIVE_CELL], [ALIVE_CELL], [ALIVE_CELL]];
+
+  const result = runSimulations(testMatrix, 1);
+
+  const afterOneGeneration = [
+    [DEAD_CELL, DEAD_CELL],
+    [ALIVE_CELL, ALIVE_CELL],
+    [DEAD_CELL, DEAD_CELL],
+  ];
+
+  expect(result).toEqual(afterOneGeneration);
 });
