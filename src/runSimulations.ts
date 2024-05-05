@@ -41,6 +41,9 @@ export default function runSimulations(matrix: string[][], generations: number) 
   if (boundaryExpansions.above.length > 0) {
     simulated.unshift(boundaryExpansions.above);
   }
+  if (boundaryExpansions.below.length > 0) {
+    simulated.push(boundaryExpansions.below);
+  }
   console.log(simulated);
   return simulated;
 }
@@ -76,20 +79,28 @@ function countNeighbors(matrix: string[][], row: number, column: number) {
   return aliveNeighbors;
 }
 
-function checkBoundaryExpansions(matrix: string[][]) {
+function checkBoundaryExpansions(matrix: string[][]): BoundaryExpansions {
   const boundaryExpansions: BoundaryExpansions = { above: [], below: [], left: [], right: [] };
 
+  boundaryExpansions.above = checkNewRow(matrix);
+  boundaryExpansions.below = checkNewRow(matrix, false);
+
+  return boundaryExpansions;
+}
+
+function checkNewRow(matrix: string[][], isAbove = true): string[] {
+  const row = isAbove ? 0 : matrix.length - 1;
   let keepNewRow = false;
   const newRow: string[] = [DEAD_CELL];
-  for (let column = 1; column < matrix[0].length - 1; column++) {
+  for (let column = 1; column < matrix[row].length - 1; column++) {
     let neighborCount = 0;
-    if (matrix[0][column - 1] === ALIVE_CELL) {
+    if (matrix[row][column - 1] === ALIVE_CELL) {
       neighborCount += 1;
     }
-    if (matrix[0][column] === ALIVE_CELL) {
+    if (matrix[row][column] === ALIVE_CELL) {
       neighborCount += 1;
     }
-    if (matrix[0][column + 1] === ALIVE_CELL) {
+    if (matrix[row][column + 1] === ALIVE_CELL) {
       neighborCount += 1;
     }
     if (neighborCount === 3) {
@@ -101,8 +112,8 @@ function checkBoundaryExpansions(matrix: string[][]) {
   }
   if (keepNewRow) {
     newRow.push(DEAD_CELL);
-    boundaryExpansions.above = newRow;
+    return newRow;
   }
 
-  return boundaryExpansions;
+  return [];
 }

@@ -112,7 +112,7 @@ describe('Simulate generations passing in the pattern', () => {
     expect(result).toEqual(afterOneGeneration);
   });
 
-  test('The pattern expands one row above whean a dead cell comes alive outside the edge', () => {
+  test('The pattern expands one row above when a dead cell comes alive outside the edge', () => {
     const testMatrix = [
       [ALIVE_CELL, ALIVE_CELL, ALIVE_CELL],
       [DEAD_CELL, DEAD_CELL, DEAD_CELL],
@@ -129,8 +129,11 @@ describe('Simulate generations passing in the pattern', () => {
     expect(result).toEqual(afterOneGeneration);
   });
 
-  test.skip('A blinker pattern changes after one generation', () => {
-    const testMatrix = [[ALIVE_CELL, ALIVE_CELL, ALIVE_CELL]];
+  test('The pattern expands one row below when a dead cell comes alive outside the edge', () => {
+    const testMatrix = [
+      [DEAD_CELL, DEAD_CELL, DEAD_CELL],
+      [ALIVE_CELL, ALIVE_CELL, ALIVE_CELL],
+    ];
 
     const result = runSimulations(testMatrix, 1);
 
