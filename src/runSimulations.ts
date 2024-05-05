@@ -1,5 +1,12 @@
 import { ALIVE_CELL, DEAD_CELL } from './constants';
 
+interface BoundaryExpansions {
+  above: string[];
+  below: string[];
+  left: string[];
+  right: string[];
+}
+
 export default function runSimulations(matrix: string[][], generations: number) {
   // Nothing to do if no generations are to be run
   if (generations === 0) {
@@ -8,12 +15,15 @@ export default function runSimulations(matrix: string[][], generations: number) 
 
   const simulated: string[][] = [];
 
+  const boundaryExpansions = checkBoundaryExpansions(matrix);
+
   for (let row = 0; row < matrix.length; row++) {
     simulated.push([]);
-    for (let column = 0; column < matrix[row].length; column++) {
+
+    for (let column = 0; column < matrix[0].length; column++) {
       const aliveNeighbors = countNeighbors(matrix, row, column);
 
-      console.log(aliveNeighbors, column);
+      console.log(row, column, aliveNeighbors);
       if (aliveNeighbors === 3) {
         simulated[row].push(ALIVE_CELL);
       } else if (matrix[row][column] === ALIVE_CELL) {
@@ -27,6 +37,10 @@ export default function runSimulations(matrix: string[][], generations: number) 
       }
     }
   }
+
+  if (boundaryExpansions.above.length > 0) {
+    simulated.unshift(boundaryExpansions.above);
+  }
   console.log(simulated);
   return simulated;
 }
@@ -39,14 +53,14 @@ function countNeighbors(matrix: string[][], row: number, column: number) {
     if (column > 0) {
       aliveNeighbors += matrix[row - 1][column - 1] === ALIVE_CELL ? 1 : 0;
     }
-    if (column < matrix[row].length - 1) {
+    if (column < matrix[row - 1].length - 1) {
       aliveNeighbors += matrix[row - 1][column + 1] === ALIVE_CELL ? 1 : 0;
     }
   }
-  if (column > 0) {
+  if (row >= 0 && column > 0) {
     aliveNeighbors += matrix[row][column - 1] === ALIVE_CELL ? 1 : 0;
   }
-  if (column < matrix[row].length - 1) {
+  if (row >= 0 && column < matrix[row].length - 1) {
     aliveNeighbors += matrix[row][column + 1] === ALIVE_CELL ? 1 : 0;
   }
   if (row < matrix.length - 1) {
@@ -54,10 +68,41 @@ function countNeighbors(matrix: string[][], row: number, column: number) {
     if (column > 0) {
       aliveNeighbors += matrix[row + 1][column - 1] === ALIVE_CELL ? 1 : 0;
     }
-    if (column < matrix[row].length - 1) {
+    if (column < matrix[row + 1].length - 1) {
       aliveNeighbors += matrix[row + 1][column + 1] === ALIVE_CELL ? 1 : 0;
     }
   }
 
   return aliveNeighbors;
+}
+
+function checkBoundaryExpansions(matrix: string[][]) {
+  const boundaryExpansions: BoundaryExpansions = { above: [], below: [], left: [], right: [] };
+
+  let keepNewRow = false;
+  const newRow: string[] = [DEAD_CELL];
+  for (let column = 1; column < matrix[0].length - 1; column++) {
+    let neighborCount = 0;
+    if (matrix[0][column - 1] === ALIVE_CELL) {
+      neighborCount += 1;
+    }
+    if (matrix[0][column] === ALIVE_CELL) {
+      neighborCount += 1;
+    }
+    if (matrix[0][column + 1] === ALIVE_CELL) {
+      neighborCount += 1;
+    }
+    if (neighborCount === 3) {
+      newRow.push(ALIVE_CELL);
+      keepNewRow = true;
+    } else {
+      newRow.push(DEAD_CELL);
+    }
+  }
+  if (keepNewRow) {
+    newRow.push(DEAD_CELL);
+    boundaryExpansions.above = newRow;
+  }
+
+  return boundaryExpansions;
 }

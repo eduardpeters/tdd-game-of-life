@@ -44,6 +44,7 @@ describe('Simulate generations passing in the pattern', () => {
 
   test('A cell with four neighbors dies after one generation', () => {
     const testMatrix = [
+      [DEAD_CELL, ALIVE_CELL, DEAD_CELL],
       [ALIVE_CELL, ALIVE_CELL, ALIVE_CELL],
       [ALIVE_CELL, DEAD_CELL, ALIVE_CELL],
     ];
@@ -51,6 +52,7 @@ describe('Simulate generations passing in the pattern', () => {
     const result = runSimulations(testMatrix, 1);
 
     const afterOneGeneration = [
+      [ALIVE_CELL, ALIVE_CELL, ALIVE_CELL],
       [ALIVE_CELL, DEAD_CELL, ALIVE_CELL],
       [ALIVE_CELL, DEAD_CELL, ALIVE_CELL],
     ];
@@ -105,6 +107,23 @@ describe('Simulate generations passing in the pattern', () => {
     const afterOneGeneration = [
       [ALIVE_CELL, ALIVE_CELL, DEAD_CELL],
       [ALIVE_CELL, ALIVE_CELL, DEAD_CELL],
+    ];
+
+    expect(result).toEqual(afterOneGeneration);
+  });
+
+  test('The pattern expands one row above whean a dead cell comes alive outside the edge', () => {
+    const testMatrix = [
+      [ALIVE_CELL, ALIVE_CELL, ALIVE_CELL],
+      [DEAD_CELL, DEAD_CELL, DEAD_CELL],
+    ];
+
+    const result = runSimulations(testMatrix, 1);
+
+    const afterOneGeneration = [
+      [DEAD_CELL, ALIVE_CELL, DEAD_CELL],
+      [DEAD_CELL, ALIVE_CELL, DEAD_CELL],
+      [DEAD_CELL, ALIVE_CELL, DEAD_CELL],
     ];
 
     expect(result).toEqual(afterOneGeneration);
