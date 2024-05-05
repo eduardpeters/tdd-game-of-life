@@ -38,6 +38,7 @@ export default function runSimulations(matrix: string[][], generations: number) 
     }
   }
 
+  console.log(boundaryExpansions);
   if (boundaryExpansions.above.length > 0) {
     simulated.unshift(boundaryExpansions.above);
   }
@@ -45,14 +46,13 @@ export default function runSimulations(matrix: string[][], generations: number) 
     simulated.push(boundaryExpansions.below);
   }
   if (boundaryExpansions.left.length > 0) {
-    console.log(boundaryExpansions.left);
     if (boundaryExpansions.above.length > 0) {
       boundaryExpansions.left.unshift(DEAD_CELL);
     }
     if (boundaryExpansions.below.length > 0) {
       boundaryExpansions.left.push(DEAD_CELL);
     }
-    for (let row = 0; row < matrix.length; row++) {
+    for (let row = 0; row < simulated.length; row++) {
       simulated[row].unshift(boundaryExpansions.left[row]);
     }
   }

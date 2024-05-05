@@ -146,6 +146,24 @@ describe('Simulate generations passing in the pattern', () => {
     expect(result).toEqual(afterOneGeneration);
   });
 
+  test('The pattern expands one row above and below when dead cells come alive outside the edge', () => {
+    const testMatrix = [
+      [ALIVE_CELL, ALIVE_CELL, ALIVE_CELL],
+      [ALIVE_CELL, ALIVE_CELL, ALIVE_CELL],
+    ];
+
+    const result = runSimulations(testMatrix, 1);
+
+    const afterOneGeneration = [
+      [DEAD_CELL, ALIVE_CELL, DEAD_CELL],
+      [ALIVE_CELL, DEAD_CELL, ALIVE_CELL],
+      [ALIVE_CELL, DEAD_CELL, ALIVE_CELL],
+      [DEAD_CELL, ALIVE_CELL, DEAD_CELL],
+    ];
+
+    expect(result).toEqual(afterOneGeneration);
+  });
+
   test('The pattern expands one row left when a dead cell comes alive outside the edge', () => {
     const testMatrix = [[ALIVE_CELL], [ALIVE_CELL], [ALIVE_CELL]];
 
@@ -155,6 +173,44 @@ describe('Simulate generations passing in the pattern', () => {
       [DEAD_CELL, DEAD_CELL],
       [ALIVE_CELL, ALIVE_CELL],
       [DEAD_CELL, DEAD_CELL],
+    ];
+
+    expect(result).toEqual(afterOneGeneration);
+  });
+
+  test('The pattern expands one row above and left when dead cells come alive outside the edge', () => {
+    const testMatrix = [
+      [ALIVE_CELL, ALIVE_CELL, ALIVE_CELL],
+      [ALIVE_CELL, DEAD_CELL, DEAD_CELL],
+      [ALIVE_CELL, DEAD_CELL, DEAD_CELL],
+    ];
+
+    const result = runSimulations(testMatrix, 1);
+
+    const afterOneGeneration = [
+      [DEAD_CELL, DEAD_CELL, ALIVE_CELL, DEAD_CELL],
+      [DEAD_CELL, ALIVE_CELL, ALIVE_CELL, DEAD_CELL],
+      [ALIVE_CELL, ALIVE_CELL, DEAD_CELL, DEAD_CELL],
+      [DEAD_CELL, DEAD_CELL, DEAD_CELL, DEAD_CELL],
+    ];
+
+    expect(result).toEqual(afterOneGeneration);
+  });
+
+  test('The pattern expands one row below and left when dead cells come alive outside the edge', () => {
+    const testMatrix = [
+      [ALIVE_CELL, DEAD_CELL, DEAD_CELL],
+      [ALIVE_CELL, DEAD_CELL, DEAD_CELL],
+      [ALIVE_CELL, ALIVE_CELL, ALIVE_CELL],
+    ];
+
+    const result = runSimulations(testMatrix, 1);
+
+    const afterOneGeneration = [
+      [DEAD_CELL, DEAD_CELL, DEAD_CELL, DEAD_CELL],
+      [ALIVE_CELL, ALIVE_CELL, DEAD_CELL, DEAD_CELL],
+      [DEAD_CELL, ALIVE_CELL, ALIVE_CELL, DEAD_CELL],
+      [DEAD_CELL, DEAD_CELL, ALIVE_CELL, DEAD_CELL],
     ];
 
     expect(result).toEqual(afterOneGeneration);
