@@ -56,6 +56,11 @@ export default function runSimulations(matrix: string[][], generations: number) 
       simulated[row].unshift(boundaryExpansions.left[row]);
     }
   }
+  if (boundaryExpansions.right.length > 0) {
+    for (let row = 0; row < simulated.length; row++) {
+      simulated[row].push(boundaryExpansions.right[row]);
+    }
+  }
   console.log(simulated);
   return simulated;
 }
@@ -97,6 +102,7 @@ function checkBoundaryExpansions(matrix: string[][]): BoundaryExpansions {
   boundaryExpansions.above = checkNewRow(matrix);
   boundaryExpansions.below = checkNewRow(matrix, false);
   boundaryExpansions.left = checkNewColumn(matrix);
+  boundaryExpansions.right = checkNewColumn(matrix, false);
 
   return boundaryExpansions;
 }
@@ -132,7 +138,7 @@ function checkNewRow(matrix: string[][], isAbove = true): string[] {
 }
 
 function checkNewColumn(matrix: string[][], isLeft = true): string[] {
-  const column = isLeft ? 0 : matrix.length - 1;
+  const column = isLeft ? 0 : matrix[0].length - 1;
   let keepNewColumn = false;
   const newColumn: string[] = [DEAD_CELL];
   for (let row = 1; row < matrix.length - 1; row++) {
