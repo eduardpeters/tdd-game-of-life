@@ -44,6 +44,18 @@ export default function runSimulations(matrix: string[][], generations: number) 
   if (boundaryExpansions.below.length > 0) {
     simulated.push(boundaryExpansions.below);
   }
+  if (boundaryExpansions.left.length > 0) {
+    console.log(boundaryExpansions.left);
+    if (boundaryExpansions.above.length > 0) {
+      boundaryExpansions.left.unshift(DEAD_CELL);
+    }
+    if (boundaryExpansions.below.length > 0) {
+      boundaryExpansions.left.push(DEAD_CELL);
+    }
+    for (let row = 0; row < matrix.length; row++) {
+      simulated[row].unshift(boundaryExpansions.left[row]);
+    }
+  }
   console.log(simulated);
   return simulated;
 }
@@ -84,6 +96,7 @@ function checkBoundaryExpansions(matrix: string[][]): BoundaryExpansions {
 
   boundaryExpansions.above = checkNewRow(matrix);
   boundaryExpansions.below = checkNewRow(matrix, false);
+  boundaryExpansions.left = checkNewColumn(matrix);
 
   return boundaryExpansions;
 }
@@ -113,6 +126,36 @@ function checkNewRow(matrix: string[][], isAbove = true): string[] {
   if (keepNewRow) {
     newRow.push(DEAD_CELL);
     return newRow;
+  }
+
+  return [];
+}
+
+function checkNewColumn(matrix: string[][], isLeft = true): string[] {
+  const column = isLeft ? 0 : matrix.length - 1;
+  let keepNewColumn = false;
+  const newColumn: string[] = [DEAD_CELL];
+  for (let row = 1; row < matrix.length - 1; row++) {
+    let neighborCount = 0;
+    if (matrix[row - 1][column] === ALIVE_CELL) {
+      neighborCount += 1;
+    }
+    if (matrix[row][column] === ALIVE_CELL) {
+      neighborCount += 1;
+    }
+    if (matrix[row + 1][column] === ALIVE_CELL) {
+      neighborCount += 1;
+    }
+    if (neighborCount === 3) {
+      newColumn.push(ALIVE_CELL);
+      keepNewColumn = true;
+    } else {
+      newColumn.push(DEAD_CELL);
+    }
+  }
+  if (keepNewColumn) {
+    newColumn.push(DEAD_CELL);
+    return newColumn;
   }
 
   return [];
