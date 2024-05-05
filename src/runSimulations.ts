@@ -41,17 +41,23 @@ export default function runSimulations(matrix: string[][], generations: number) 
   console.log(boundaryExpansions);
   if (boundaryExpansions.above.length > 0) {
     simulated.unshift(boundaryExpansions.above);
+    if (boundaryExpansions.left.length > 0) {
+      boundaryExpansions.left.unshift(DEAD_CELL);
+    }
+    if (boundaryExpansions.right.length > 0) {
+      boundaryExpansions.right.unshift(DEAD_CELL);
+    }
   }
   if (boundaryExpansions.below.length > 0) {
     simulated.push(boundaryExpansions.below);
-  }
-  if (boundaryExpansions.left.length > 0) {
-    if (boundaryExpansions.above.length > 0) {
-      boundaryExpansions.left.unshift(DEAD_CELL);
-    }
-    if (boundaryExpansions.below.length > 0) {
+    if (boundaryExpansions.left.length > 0) {
       boundaryExpansions.left.push(DEAD_CELL);
     }
+    if (boundaryExpansions.right.length > 0) {
+      boundaryExpansions.right.push(DEAD_CELL);
+    }
+  }
+  if (boundaryExpansions.left.length > 0) {
     for (let row = 0; row < simulated.length; row++) {
       simulated[row].unshift(boundaryExpansions.left[row]);
     }
