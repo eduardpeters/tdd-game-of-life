@@ -2,7 +2,8 @@ import { ALIVE_CELL, DEAD_CELL, RLE_LINE_BREAK, RLE_PATTERN_END } from './consta
 import { Dimensions, PatternFileData } from './types';
 
 export default function encodeRLE(data: PatternFileData) {
-  const headers = buildHeaders(data.headers, data.dimensions);
+  const newDimensions = { x: data.matrix[0].length, y: data.matrix.length };
+  const headers = buildHeaders(data.headers, newDimensions);
   const pattern = buildPattern(data.matrix);
   return `${headers}\n${pattern}`;
 }

@@ -56,4 +56,13 @@ describe('Running the main application', () => {
       '#N Blinker\n#O John Conway\n#C A period 2 oscillator that is the smallest and most common oscillator.\n#C www.conwaylife.com/wiki/index.php?title=Blinker\nx = 3, y = 3, rule = B3/S23\nbo$bo$bo!';
     expect(main(filepath, generations)).toEqual(fileString);
   });
+
+  test('A Glider RLE file is read and returned moved and rotated after two generations', () => {
+    const filepath = '../patterns/glider.rle';
+    const generations = 2;
+
+    const fileString =
+      '#N Glider\n#O Richard K. Guy\n#C The smallest, most common, and first discovered spaceship. Diagonal, has period 4 and speed c/4.\n#C www.conwaylife.com/wiki/index.php?title=Glider\nx = 3, y = 4, rule = B3/S23\n3b$2bo$obo$b2o!';
+    expect(main(filepath, generations)).toEqual(fileString);
+  });
 });

@@ -17,7 +17,6 @@ export default function main(filepath: string, generations: number) {
 
   const encoded = encodeRLE({
     ...parsed,
-    dimensions: { x: simulated[0].length, y: simulated.length },
     matrix: simulated,
   });
 
