@@ -29,7 +29,6 @@ export default function runSimulations(matrix: string[][], generations: number) 
       for (let column = 0; column < matrix[0].length; column++) {
         const aliveNeighbors = countNeighbors(matrix, row, column);
 
-        console.log(row, column, aliveNeighbors);
         if (aliveNeighbors === 3) {
           simulated[row].push(ALIVE_CELL);
         } else if (matrix[row][column] === ALIVE_CELL) {
@@ -44,7 +43,6 @@ export default function runSimulations(matrix: string[][], generations: number) 
       }
     }
 
-    console.log(boundaryExpansions);
     if (boundaryExpansions.above.length > 0) {
       simulated.unshift(boundaryExpansions.above);
       if (boundaryExpansions.left.length > 0) {
@@ -73,8 +71,8 @@ export default function runSimulations(matrix: string[][], generations: number) 
         simulated[row].push(boundaryExpansions.right[row]);
       }
     }
-    console.log(simulated);
   }
+
   return simulated;
 }
 
