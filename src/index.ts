@@ -1,3 +1,4 @@
+import { argv } from 'node:process';
 import fs from 'node:fs';
 import path from 'path';
 import parseRLE from './parseRLE';
@@ -22,3 +23,5 @@ export default function main(filepath: string, generations: number) {
 
   return encoded;
 }
+
+console.log(main(argv[2], parseInt(argv[3])));
