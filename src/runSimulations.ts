@@ -13,61 +13,68 @@ export default function runSimulations(matrix: string[][], generations: number) 
     return matrix;
   }
 
-  const simulated: string[][] = [];
+  let simulated: string[][] = [];
 
-  const boundaryExpansions = checkBoundaryExpansions(matrix);
+  for (let runs = 0; runs < generations; runs++) {
+    if (simulated.length > 0) {
+      matrix = simulated;
+      simulated = [];
+    }
 
-  for (let row = 0; row < matrix.length; row++) {
-    simulated.push([]);
+    const boundaryExpansions = checkBoundaryExpansions(matrix);
 
-    for (let column = 0; column < matrix[0].length; column++) {
-      const aliveNeighbors = countNeighbors(matrix, row, column);
+    for (let row = 0; row < matrix.length; row++) {
+      simulated.push([]);
 
-      console.log(row, column, aliveNeighbors);
-      if (aliveNeighbors === 3) {
-        simulated[row].push(ALIVE_CELL);
-      } else if (matrix[row][column] === ALIVE_CELL) {
-        if (aliveNeighbors > 3 || aliveNeighbors < 2) {
-          simulated[row].push(DEAD_CELL);
-        } else {
+      for (let column = 0; column < matrix[0].length; column++) {
+        const aliveNeighbors = countNeighbors(matrix, row, column);
+
+        console.log(row, column, aliveNeighbors);
+        if (aliveNeighbors === 3) {
           simulated[row].push(ALIVE_CELL);
+        } else if (matrix[row][column] === ALIVE_CELL) {
+          if (aliveNeighbors > 3 || aliveNeighbors < 2) {
+            simulated[row].push(DEAD_CELL);
+          } else {
+            simulated[row].push(ALIVE_CELL);
+          }
+        } else {
+          simulated[row].push(DEAD_CELL);
         }
-      } else {
-        simulated[row].push(DEAD_CELL);
       }
     }
-  }
 
-  console.log(boundaryExpansions);
-  if (boundaryExpansions.above.length > 0) {
-    simulated.unshift(boundaryExpansions.above);
+    console.log(boundaryExpansions);
+    if (boundaryExpansions.above.length > 0) {
+      simulated.unshift(boundaryExpansions.above);
+      if (boundaryExpansions.left.length > 0) {
+        boundaryExpansions.left.unshift(DEAD_CELL);
+      }
+      if (boundaryExpansions.right.length > 0) {
+        boundaryExpansions.right.unshift(DEAD_CELL);
+      }
+    }
+    if (boundaryExpansions.below.length > 0) {
+      simulated.push(boundaryExpansions.below);
+      if (boundaryExpansions.left.length > 0) {
+        boundaryExpansions.left.push(DEAD_CELL);
+      }
+      if (boundaryExpansions.right.length > 0) {
+        boundaryExpansions.right.push(DEAD_CELL);
+      }
+    }
     if (boundaryExpansions.left.length > 0) {
-      boundaryExpansions.left.unshift(DEAD_CELL);
+      for (let row = 0; row < simulated.length; row++) {
+        simulated[row].unshift(boundaryExpansions.left[row]);
+      }
     }
     if (boundaryExpansions.right.length > 0) {
-      boundaryExpansions.right.unshift(DEAD_CELL);
+      for (let row = 0; row < simulated.length; row++) {
+        simulated[row].push(boundaryExpansions.right[row]);
+      }
     }
+    console.log(simulated);
   }
-  if (boundaryExpansions.below.length > 0) {
-    simulated.push(boundaryExpansions.below);
-    if (boundaryExpansions.left.length > 0) {
-      boundaryExpansions.left.push(DEAD_CELL);
-    }
-    if (boundaryExpansions.right.length > 0) {
-      boundaryExpansions.right.push(DEAD_CELL);
-    }
-  }
-  if (boundaryExpansions.left.length > 0) {
-    for (let row = 0; row < simulated.length; row++) {
-      simulated[row].unshift(boundaryExpansions.left[row]);
-    }
-  }
-  if (boundaryExpansions.right.length > 0) {
-    for (let row = 0; row < simulated.length; row++) {
-      simulated[row].push(boundaryExpansions.right[row]);
-    }
-  }
-  console.log(simulated);
   return simulated;
 }
 

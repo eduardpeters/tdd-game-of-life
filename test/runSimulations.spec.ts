@@ -317,4 +317,60 @@ describe('Simulate generations passing in the pattern', () => {
       expect(result).toEqual(afterOneGeneration);
     });
   });
+
+  describe('Multiple generation simulations', () => {
+    test('The blinker pattern returns to its original pattern after two generations', () => {
+      const testMatrix = [
+        [DEAD_CELL, ALIVE_CELL, DEAD_CELL],
+        [DEAD_CELL, ALIVE_CELL, DEAD_CELL],
+        [DEAD_CELL, ALIVE_CELL, DEAD_CELL],
+      ];
+
+      const result = runSimulations(testMatrix, 2);
+
+      const afterTwoGenerations = [
+        [DEAD_CELL, ALIVE_CELL, DEAD_CELL],
+        [DEAD_CELL, ALIVE_CELL, DEAD_CELL],
+        [DEAD_CELL, ALIVE_CELL, DEAD_CELL],
+      ];
+
+      expect(result).toEqual(afterTwoGenerations);
+    });
+
+    test('The block pattern does not change after multiple generations', () => {
+      const testMatrix = [
+        [ALIVE_CELL, ALIVE_CELL],
+        [ALIVE_CELL, ALIVE_CELL],
+      ];
+
+      const result = runSimulations(testMatrix, 10);
+
+      const afterNGenerations = [
+        [ALIVE_CELL, ALIVE_CELL],
+        [ALIVE_CELL, ALIVE_CELL],
+      ];
+
+      expect(result).toEqual(afterNGenerations);
+    });
+
+    test('The glider pattern returns to its original state after four generations, but traveled expanding the boundaries', () => {
+      //bo$2bo$3o!
+      const testMatrix = [
+        [DEAD_CELL, ALIVE_CELL, DEAD_CELL],
+        [DEAD_CELL, DEAD_CELL, ALIVE_CELL],
+        [ALIVE_CELL, ALIVE_CELL, ALIVE_CELL],
+      ];
+
+      const result = runSimulations(testMatrix, 4);
+
+      const afterFourGenerations = [
+        [DEAD_CELL, DEAD_CELL, DEAD_CELL, DEAD_CELL],
+        [DEAD_CELL, DEAD_CELL, ALIVE_CELL, DEAD_CELL],
+        [DEAD_CELL, DEAD_CELL, DEAD_CELL, ALIVE_CELL],
+        [DEAD_CELL, ALIVE_CELL, ALIVE_CELL, ALIVE_CELL],
+      ];
+
+      expect(result).toEqual(afterFourGenerations);
+    });
+  });
 });
