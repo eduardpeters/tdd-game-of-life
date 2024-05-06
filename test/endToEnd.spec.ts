@@ -47,4 +47,13 @@ describe('Running the main application', () => {
 
     expect(main(filepath, generations)).toEqual(fileString);
   });
+
+  test('A Blinker RLE file is read and returned rotated after one generation', () => {
+    const filepath = '../patterns/blinker.rle';
+    const generations = 1;
+
+    const fileString =
+      '#N Blinker\n#O John Conway\n#C A period 2 oscillator that is the smallest and most common oscillator.\n#C www.conwaylife.com/wiki/index.php?title=Blinker\nx = 3, y = 3, rule = B3/S23\nbo$bo$bo!';
+    expect(main(filepath, generations)).toEqual(fileString);
+  });
 });
